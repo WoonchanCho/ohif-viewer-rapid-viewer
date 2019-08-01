@@ -286,33 +286,11 @@ Template.toolbarSection.helpers({
             subTools: freehandTools
         });
 
-        const brushTools = [
-          {
+        buttonData.push({
             id: 'brush',
-            title: 'Manual (B)',
+            title: 'Brush (B)',
             classes: 'imageViewerTool',
             svgLink: 'packages/icr_peppermint-tools/assets/icons.svg#icon-brush-regular'
-          },
-          {
-            id: 'brushHUGated',
-            title: 'Smart CT',
-            classes: 'imageViewerTool',
-            svgLink: 'packages/icr_peppermint-tools/assets/icons.svg#icon-brush-smart'
-          },
-          {
-            id: 'brushAutoGated',
-            title: 'Auto',
-            classes: 'imageViewerTool',
-            svgLink: 'packages/icr_peppermint-tools/assets/icons.svg#icon-brush-auto'
-          }
-        ];
-
-        buttonData.push({
-            id: 'Brush',
-            title: 'Segment',
-            classes: 'rp-x-1 rm-l-3',
-            svgLink: 'packages/icr_peppermint-tools/assets/icons.svg#icon-segmentation-menu',
-            subTools: brushTools
         });
 
         buttonData.push({

@@ -393,7 +393,6 @@ export default class SegmentationMenu extends React.Component {
               </tbody>
             </table>
           </div>
-          <BrushSettings />
         </div>
       );
     }
