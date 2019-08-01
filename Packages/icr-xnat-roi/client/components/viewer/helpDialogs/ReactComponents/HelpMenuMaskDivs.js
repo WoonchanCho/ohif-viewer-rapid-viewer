@@ -114,7 +114,6 @@ const segments = (
       You can export the labelmap. Overlapping segments are valid and can be
       exported.
     </p>
-    {smartSettings}
   </div>
 );
 

@@ -8,19 +8,9 @@ export default class HelpMenuMask extends React.Component {
     this.state = {
       menus: [
         {
-          name: "Manual",
+          name: "Brush",
           xlinkHref:
             "packages/icr_peppermint-tools/assets/icons.svg#icon-brush-regular"
-        },
-        {
-          name: "Smart CT",
-          xlinkHref:
-            "packages/icr_peppermint-tools/assets/icons.svg#icon-brush-smart"
-        },
-        {
-          name: "Auto",
-          xlinkHref:
-            "packages/icr_peppermint-tools/assets/icons.svg#icon-brush-auto"
         },
         {
           name: "Segments",
@@ -28,7 +18,7 @@ export default class HelpMenuMask extends React.Component {
             "packages/icr_peppermint-tools/assets/icons.svg#icon-seg-management-menu"
         }
       ],
-      selected: "Manual"
+      selected: "Brush"
     };
 
     this.isSelected = this.isSelected.bind(this);
@@ -66,12 +56,8 @@ export default class HelpMenuMask extends React.Component {
     const { selected } = this.state;
 
     switch (selected) {
-      case "Manual":
+      case "Brush":
         return divs.manual;
-      case "Smart CT":
-        return divs.smartCt;
-      case "Auto":
-        return divs.auto;
       case "Segments":
         return divs.segments;
     }
