@@ -13,6 +13,9 @@ const ViewerRouting = asyncComponent(() =>
   import(/* webpackChunkName: "ViewerRouting" */ './ViewerRouting.js')
 );
 
+const RapidViewerRouting = asyncComponent(() =>
+  import(/* webpackChunkName: "ViewerRouting" */ '../viewer/ViewerRouting.js')
+);
 const StudyListRouting = asyncComponent(() =>
   import(
     /* webpackChunkName: "StudyListRouting" */ '../studylist/StudyListRouting.js'
@@ -34,6 +37,16 @@ const ViewerLocalFileData = asyncComponent(() =>
   )
 );
 
+const XnatLogin = asyncComponent(() =>
+  import(
+    /* webpackChunkName: "XnatLogin" */ '@ohif/extension-rapid-viewer/src/components/XnatLogin.js'
+  )
+);
+const WorkListRouting = asyncComponent(() =>
+  import(
+    /* webpackChunkName: "WorkListRouting" */ '../worklist/WorkListRouting.js'
+  )
+);
 const reload = () => window.location.reload();
 
 // Define XNAT Route based on URL/Context configuration
@@ -53,6 +66,10 @@ const ROUTES_DEF = {
       path: '/viewer/:studyInstanceUIDs',
       component: ViewerRouting,
     },
+    rapidViewer: {
+      path: '/rapid-viewer/:workListId',
+      component: RapidViewerRouting,
+    },
     // standaloneViewer: {
     //   path: '/sa_viewer',
     //   component: StandaloneRouting,
@@ -62,7 +79,7 @@ const ROUTES_DEF = {
       component: XNATStandaloneRouting,
     },
     list: {
-      path: ['/studylist', '/'],
+      path: ['/studylist'],
       component: StudyListRouting,
       condition: appConfig => {
         return appConfig.showStudyList;
@@ -76,6 +93,14 @@ const ROUTES_DEF = {
     //   path: '/IHEInvokeImageDisplay',
     //   component: IHEInvokeImageDisplay
     // },
+    xnatLogin: {
+      path: ['/login'],
+      component: XnatLogin,
+    },
+    workList: {
+      path: ['/worklist', '/'],
+      component: WorkListRouting,
+    },
   },
   gcloud: {
     viewer: {

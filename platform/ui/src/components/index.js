@@ -25,6 +25,7 @@ import {
 import { ToolbarSection } from './toolbarSection';
 import { Tooltip } from './tooltip';
 import { ErrorBoundary } from './errorBoundary';
+import { WorkList } from './workList';
 
 export {
   ErrorBoundary,
@@ -59,4 +60,5 @@ export {
   Tooltip,
   AboutContent,
   OHIFModal,
+  WorkList,
 };

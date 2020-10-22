@@ -9,6 +9,7 @@ import {
 import { reducer as oidcReducer } from 'redux-oidc';
 import { redux } from '@ohif/core';
 import thunkMiddleware from 'redux-thunk';
+import rapidReducers from '@ohif/extension-rapid-viewer/src/redux/reducers';
 
 // Combine our @ohif/core and oidc reducers
 // Set init data, using values found in localStorage
@@ -17,6 +18,8 @@ const middleware = [thunkMiddleware];
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 reducers.oidc = oidcReducer;
+reducers.authentication = rapidReducers.authentication;
+reducers.rapidViewer = rapidReducers.rapidViewer;
 
 const rootReducer = combineReducers(reducers);
 const preloadedState = {
@@ -35,6 +38,7 @@ const store = createStore(
 store.subscribe(() => {
   localStorage.saveState({
     preferences: store.getState().preferences,
+    authentication: store.getState().authentication,
   });
   sessionStorage.saveState({
     servers: store.getState().servers,

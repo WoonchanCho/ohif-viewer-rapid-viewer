@@ -14,6 +14,7 @@
     "cm": "npx git-cz",
     "build": "lerna run build:viewer --stream",
     "build:xnat": "lerna run build:viewer:xnat --stream",
+    "build:rapid": "lerna run build:viewer:rapid --stream",
     "build:lt": "lerna run build:viewer:lesion-tracker --stream",
     "build:ci": "lerna run build:viewer:ci --stream",
     "build:demo": "lerna run build:viewer:demo --stream",
@@ -21,6 +22,7 @@
     "build:package-all": "lerna run build:package --parallel --stream",
     "dev": "lerna run dev:viewer --stream",
     "dev:xnat": "lerna run dev:viewer:xnat --stream",
+    "dev:rapid": "lerna run dev:viewer:rapid --stream",
     "dev:lt": "lerna run dev:viewer:lesion-tracker --stream",
     "dev:project": ".scripts/dev.sh",
     "dev:orthanc": "lerna run dev:orthanc --stream",
@@ -38,7 +40,8 @@
     "release": "yarn run lerna:version && yarn run lerna:publish",
     "lerna:version": "npx lerna version prerelease --force-publish",
     "lerna:publish": "lerna publish from-package --canary --dist-tag canary",
-    "link-list": "npm ls --depth=0 --link=true"
+    "link-list": "npm ls --depth=0 --link=true",
+    "package:rapid": "yarn build:rapid && lerna run package:electron --stream"
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",

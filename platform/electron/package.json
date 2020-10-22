@@ -1,0 +1,19 @@
+{
+  "name": "@ohif/electron",
+  "version": "1.0.0",
+  "main": "main/index.prod.js",
+  "license": "MIT",
+  "scripts": {
+    "start:electron": "yarn build:electron && cross-env NODE_ENV=production electron ./main/index.prod.js",
+    "dev:electron": "cross-env NODE_ENV=development electron ./main/index.dev.js",
+    "build:electron": "cross-env NODE_ENV=production webpack --config ./.webpack/webpack.config.main.prod.js --colors",
+    "package:electron": "rm -rf dist && yarn build:electron && electron-packager ./ --appname rapidviewer --executable-name rapidviewer --out dist",
+    "package-all:electron": "rm -rf dist && yarn build:electron && electron-packager ./ --appname rapidviewer --executable-name rapidviewer --all",
+    "help:electron": "electron-packager --help"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^10.1.3",
+    "electron-packager": "^15.1.0"
+  }
+}

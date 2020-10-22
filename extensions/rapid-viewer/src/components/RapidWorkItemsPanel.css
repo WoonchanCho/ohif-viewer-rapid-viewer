@@ -1,0 +1,43 @@
+.rapid-navigation-tree {
+  color: #fff;
+  float: left;
+  height: 100%;
+  width: 97%;
+  background-color: #000;
+  overflow: auto;
+  margin-left: 8px;
+  padding-bottom: 20px;
+}
+
+.rapid-navigation-tree h4 {
+  font-weight: 500;
+  font-size: 18px;
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.rapid-navigation-tree {
+  max-height: calc(100%);
+  text-align: left;
+  display: inline-block;
+}
+
+.rapid-navigation-tree ul {
+  padding-left: 10px;
+  list-style-type: none;
+}
+
+.rapid-navigation-tree .rapid-filter-row {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.rapid-navigation-tree .rapid-filter-name {
+  width: 60px;
+}
+
+.rapid-navigation-tree .rapid-filter-value {
+  width: 70%;
+}

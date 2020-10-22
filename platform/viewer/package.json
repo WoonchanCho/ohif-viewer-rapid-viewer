@@ -23,11 +23,13 @@
     "build:viewer:lesion-tracker": "cross-env ENTRY_TARGET=index-lesion-tracker.js NODE_ENV=production node --max_old_space_size=4096 ./../../node_modules/webpack/bin/webpack.js --config .webpack/webpack.pwa.js --progress",
     "build:viewer:ci": "cross-env NODE_ENV=production PUBLIC_URL=/pwa/ APP_CONFIG=config/netlify.js QUICK_BUILD=true node --max_old_space_size=4096 ./../../node_modules/webpack/bin/webpack.js --config .webpack/webpack.pwa.js",
     "build:viewer:demo": "cross-env NODE_ENV=production APP_CONFIG=config/demo.js HTML_TEMPLATE=rollbar.html QUICK_BUILD=true node --max_old_space_size=4096 ./../../node_modules/webpack/bin/webpack.js --progress --config .webpack/webpack.pwa.js",
+    "build:viewer:rapid": "cross-env NODE_ENV=production APP_CONFIG=config/rapid-viewer.js PUBLIC_URL='/' QUICK_BUILD=true node --max_old_space_size=4096 ./../../node_modules/webpack/bin/webpack.js --config .webpack/webpack.pwa.js --progress && yarn install:viewer:rapid",
     "build:viewer:package": "yarn run build:package",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config .webpack/webpack.pwa.js --watch",
     "dev:orthanc": "cross-env NODE_ENV=development PROXY_TARGET=/dicom-web PROXY_DOMAIN=http://localhost:8042 APP_CONFIG=config/docker_nginx-orthanc.js webpack-dev-server --config .webpack/webpack.pwa.js --watch",
     "dev:viewer": "yarn run dev",
     "dev:viewer:xnat": "cross-env NODE_ENV=development PUBLIC_URL=/ XNAT_PROXY=/xnat-dev APP_CONFIG=config/xnat-dev.js webpack-dev-server --config .webpack/webpack.pwa.js --watch",
+    "dev:viewer:rapid": "cross-env NODE_ENV=development PUBLIC_URL=/ XNAT_PROXY=/xnat-dev APP_CONFIG=config/rapid-viewer.js webpack-dev-server --config .webpack/webpack.pwa.js --watch",
     "dev:viewer:lesion-tracker": "cross-env ENTRY_TARGET=index-lesion-tracker.js NODE_ENV=development webpack-dev-server --config .webpack/webpack.pwa.js --watch",
     "start": "yarn run dev",
     "test:e2e": "cypress open",
@@ -38,7 +40,8 @@
     "test:unit": "jest --watchAll",
     "test:unit:ci": "jest --ci --runInBand --collectCoverage",
     "prepublishOnly": "yarn run build:package",
-    "postpublish": "node -p -e \"require('./package.json').version\" > success_version.txt"
+    "postpublish": "node -p -e \"require('./package.json').version\" > success_version.txt",
+    "install:viewer:rapid": "shx rm -rf ../electron/public/* && shx cp -r ./dist/* ../electron/public"
   },
   "files": [
     "dist",
@@ -59,11 +62,12 @@
     "@ohif/extension-dicom-rt": "^0.2.1",
     "@ohif/extension-dicom-segmentation": "^0.3.1",
     "@ohif/extension-lesion-tracker": "^0.2.0",
+    "@ohif/extension-rapid-viewer": "^0.0.1",
     "@ohif/extension-vtk": "^1.6.4",
-    "@xnat-ohif/extension-xnat": "^4.2.7",
     "@ohif/i18n": "^0.52.8",
     "@ohif/ui": "^1.5.1",
     "@tanem/react-nprogress": "^1.1.25",
+    "@xnat-ohif/extension-xnat": "^4.2.7",
     "classnames": "^2.2.6",
     "core-js": "^3.2.1",
     "cornerstone-core": "^2.2.8",
@@ -99,6 +103,8 @@
     "gh-pages": "2.0.1",
     "identity-obj-proxy": "3.0.x",
     "lodash": "4.17.15",
-    "lodash.clonedeep": "4.5.0"
+    "lodash.clonedeep": "4.5.0",
+    "shelljs": "^0.8.4",
+    "shx": "^0.3.2"
   }
 }

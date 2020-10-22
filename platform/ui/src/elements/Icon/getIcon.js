@@ -89,6 +89,7 @@ import eye from './icons/eye.svg';
 import eyeClosed from './icons/eye-closed.svg';
 // ICR/XNAT icons
 import { XNATICONS } from '@xnat-ohif/extension-xnat';
+import { RAPIDICONS } from '@ohif/extension-rapid-viewer';
 
 const ICONS = {
   eye,
@@ -179,6 +180,7 @@ const ICONS = {
   liver,
   save: saveRegular,
   ...XNATICONS,
+  ...RAPIDICONS,
 };
 
 /**

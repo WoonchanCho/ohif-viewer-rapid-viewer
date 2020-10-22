@@ -113,8 +113,11 @@ module.exports = (env, argv) => {
     },
   });
 
-  if (APP_CONFIG === 'config/xnat-dev.js') {
-    const XNAT_DOMAIN = process.env.XNAT_DOMAIN;
+  if (
+    APP_CONFIG === 'config/xnat-dev.js' ||
+    APP_CONFIG === 'config/rapid-viewer.js'
+  ) {
+    const XNAT_DOMAIN = process.env.XNAT_DOMAIN || 'http://localhost:8080';
     const XNAT_PROXY = process.env.XNAT_PROXY;
     if (XNAT_DOMAIN && XNAT_PROXY) {
       mergedConfig.devServer.proxy = {};
@@ -125,13 +128,15 @@ module.exports = (env, argv) => {
         // pathRewrite: { [pr]: '' },
         pathRewrite: function(path, req) {
           let newPath = path.replace(XNAT_PROXY, '');
-          console.log(`## devServer.proxy: ${pr} ${path} __ ${newPath}`)
+          console.log(`## devServer.proxy: ${pr} ${path} __ ${newPath}`);
           return newPath;
         },
-        onProxyRes: function (proxyRes, req, res) {
+        onProxyRes: function(proxyRes, req, res) {
           proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-          proxyRes.headers['Access-Control-Allow-Headers'] = 'X-Requested-With,content-type,Authorization,JSESSIONID';
-          proxyRes.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE';
+          proxyRes.headers['Access-Control-Allow-Headers'] =
+            'X-Requested-With,content-type,Authorization,JSESSIONID';
+          proxyRes.headers['Access-Control-Allow-Methods'] =
+            'GET,PUT,POST,DELETE';
           proxyRes.headers['Access-Control-Allow-Credentials'] = 'true';
         },
       };
@@ -153,6 +158,5 @@ module.exports = (env, argv) => {
   if (!isProdBuild) {
     mergedConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
   }
-
   return mergedConfig;
 };

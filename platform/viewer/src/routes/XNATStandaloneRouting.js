@@ -13,6 +13,7 @@ import {
   xnatAuthenticate,
   reassignInstanceUrls,
 } from '@xnat-ohif/extension-xnat';
+import { getBasicAuthHeaderWithToken } from '@ohif/extension-rapid-viewer/src/fetch/util';
 
 const { log, metadata, utils } = OHIF;
 const { studyMetadataManager } = utils;
@@ -29,6 +30,12 @@ class XNATStandaloneRouting extends Component {
   };
 
   static propTypes = {
+    xnatUrl: PropTypes.string.isRequired,
+    workListId: PropTypes.string.isRequired,
+    projectId: PropTypes.string.isRequired,
+    subjectId: PropTypes.string.isRequired,
+    experimentId: PropTypes.string.isRequired,
+    experimentLabel: PropTypes.string.isRequired,
     location: PropTypes.object,
     store: PropTypes.object,
     setServers: PropTypes.func,
@@ -88,7 +95,7 @@ class XNATStandaloneRouting extends Component {
           view: 'session',
         });
 
-        const jsonRequestUrl = `${rootUrl}xapi/viewer/projects/${projectId}/experiments/${experimentId}`;
+        const jsonRequestUrl = `${rootUrl}/xapi/viewer/projects/${projectId}/experiments/${experimentId}`;
 
         console.log(jsonRequestUrl);
 
@@ -154,7 +161,10 @@ class XNATStandaloneRouting extends Component {
         log.info(`Sending Request to: ${jsonRequestUrl}`);
         oReq.open('GET', jsonRequestUrl);
         oReq.setRequestHeader('Accept', 'application/json');
-
+        const authString = getBasicAuthHeaderWithToken();
+        if (authString) {
+          oReq.setRequestHeader('Authorization', authString);
+        }
         // Fire the request to the server
         oReq.send();
       } else {
@@ -240,16 +250,97 @@ class XNATStandaloneRouting extends Component {
       }
     });
   }
+  async componentDidUpdate(prevProps) {
+    if (this.props.experimentId == prevProps.experimentId) {
+      return;
+    }
 
-  async componentDidMount() {
     try {
-      let { search } = this.props.location;
+      // let { search } = this.props.location;
 
       // Remove ? prefix which is included for some reason
-      search = search.slice(1, search.length);
+      // search = search.slice(1, search.length);
+      const {
+        projectId,
+        subjectId,
+        experimentId,
+        experimentLabel,
+      } = this.props;
+      const search = `projectId=${projectId}&subjectId=${subjectId}&experimentId=${experimentId}&experimentLabel=${experimentLabel}`;
       const query = qs.parse(search);
 
-      const rootUrl = getRootUrl();
+      // const rootUrl = getRootUrl();
+      const rootUrl = this.props.xnatUrl;
+
+      if (process.env.NODE_ENV === 'development') {
+        // Authenticate to XNAT
+        const loggedIn = await isLoggedIn();
+        console.info('Logged in XNAT? ' + loggedIn);
+        if (!loggedIn) {
+          await xnatAuthenticate();
+        }
+      }
+
+      let {
+        server,
+        studies,
+        studyInstanceUIDs,
+        seriesInstanceUIDs,
+      } = await this.parseQueryAndRetrieveDICOMWebData(rootUrl, query);
+
+      if (studies) {
+        if (process.env.NODE_ENV === 'development') {
+          // assign instance file urls to proxy value
+          reassignInstanceUrls(studies);
+        }
+
+        // Remove series with no instances
+        studies = studies.filter(study => {
+          study.series = study.series.filter(series => {
+            return series.instances.length > 0;
+          });
+          return study.series !== undefined;
+        });
+
+        // Parse data here and add to metadata provider
+        await updateMetaDataProvider(studies);
+
+        const {
+          studies: updatedStudies,
+          studyInstanceUIDs: updatedStudiesInstanceUIDs,
+        } = _mapStudiesToNewFormat(studies);
+        studies = updatedStudies;
+        studyInstanceUIDs = updatedStudiesInstanceUIDs;
+
+        this.setState({
+          studies,
+          server,
+          studyInstanceUIDs,
+          seriesInstanceUIDs,
+          loading: false,
+        });
+      }
+    } catch (error) {
+      this.setState({ error: error.message, loading: false });
+    }
+  }
+  async componentDidMount() {
+    try {
+      // let { search } = this.props.location;
+
+      // Remove ? prefix which is included for some reason
+      // search = search.slice(1, search.length);
+      const {
+        projectId,
+        subjectId,
+        experimentId,
+        experimentLabel,
+      } = this.props;
+      const search = `projectId=${projectId}&subjectId=${subjectId}&experimentId=${experimentId}&experimentLabel=${experimentLabel}`;
+      const query = qs.parse(search);
+
+      // const rootUrl = getRootUrl();
+      const rootUrl = this.props.xnatUrl;
 
       if (process.env.NODE_ENV === 'development') {
         // Authenticate to XNAT
@@ -378,27 +469,29 @@ function _getJson(url) {
   });
 }
 
-function getRootUrl() {
-  let rootPlusPort = window.location.origin;
+// function getRootUrl() {
+//   let rootPlusPort = window.location.origin;
 
-  if (window.port) {
-    rootPlusPort += `:${window.port}`;
-  }
+//   if (window.port) {
+//     rootPlusPort += `:${window.port}`;
+//   }
 
-  const pathLessViewer = window.location.pathname.split('VIEWER')[0];
+//   const pathLessViewer = window.location.pathname.split('VIEWER')[0];
 
-  rootPlusPort += pathLessViewer;
+//   rootPlusPort += pathLessViewer;
 
-  if (process.env.NODE_ENV === 'development') {
-    console.info('### XNATStandaloneRouting Development mode! ...............');
-    const XNAT_PROXY = process.env.XNAT_PROXY;
-    rootPlusPort = XNAT_PROXY;
-  }
+//   if (process.env.NODE_ENV === 'development') {
+//     console.info('### XNATStandaloneRouting Development mode! ...............');
+//     const XNAT_PROXY = process.env.XNAT_PROXY;
+//     rootPlusPort = XNAT_PROXY;
+//   }
 
-  console.log(rootPlusPort);
-
-  return rootPlusPort;
-}
+//   console.log(rootPlusPort);
+//   if (process.env.NODE_ENV !== 'development') {
+//     return 'http://localhost:8081/';
+//   }
+//   return rootPlusPort;
+// }
 
 async function updateMetaDataProvider(studies) {
   const metadataProvider = OHIF.cornerstone.metadataProvider;

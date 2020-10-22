@@ -9,7 +9,10 @@ import { UserPreferences } from './../UserPreferences';
 import OHIFLogo from '../OHIFLogo/OHIFLogo.js';
 import './Header.css';
 //
-import { ICRHelpContent} from '@xnat-ohif/extension-xnat';
+import { ICRHelpContent } from '@xnat-ohif/extension-xnat';
+import { useDispatch } from 'react-redux';
+import actions from '@ohif/extension-rapid-viewer/src/redux/actions';
+import { fetchTokenInvalidate } from '@ohif/extension-rapid-viewer/src/fetch';
 
 function OptionsElement(props) {
   return (
@@ -39,9 +42,15 @@ function Header(props) {
   } = props;
 
   const [options, setOptions] = useState([]);
+  const [xnatUrl, setXnatUrl] = useState('');
+  const [username, setUsername] = useState('');
+  const dispatch = useDispatch();
   const hasLink = linkText && linkPath;
 
   useEffect(() => {
+    let xnatUrl = '';
+    let username = '';
+
     const optionsValue = [
       {
         title: t('ICR Help'),
@@ -74,26 +83,36 @@ function Header(props) {
       },
     ];
 
-    if (user && userManager) {
+    // if (user && userManager) {
+    if (user) {
       optionsValue.push({
         title: t('Logout'),
         icon: { name: 'power-off' },
-        onClick: () => userManager.signoutRedirect(),
+        // onClick: () => userManager.signoutRedirect(),
+        onClick: () => {
+          fetchTokenInvalidate(user.xnatUrl, user.token, user.tokenSecret);
+          dispatch(actions.clearUser());
+        },
       });
+
+      xnatUrl = user.xnatUrl;
+      username = user.username;
     }
 
     setOptions(optionsValue);
-  }, [setOptions, show, t, user, userManager]);
+    setXnatUrl(xnatUrl);
+    setUsername(username);
+  }, [dispatch, setOptions, show, t, user, userManager]);
 
   let versionStr = '';
   const version = window.config.version;
   if (version) {
     versionStr = `v${version.major}.${version.minor}.${version.patch}`;
     if (version.dev) {
-      versionStr += `-${version.dev}`
+      versionStr += `-${version.dev}`;
     }
     if (version.build) {
-      versionStr += ` build-${version.build}`
+      versionStr += ` build-${version.build}`;
     }
     if (version.dev) {
       versionStr += t(' | INVESTIGATIONAL USE ONLY');
@@ -134,7 +153,7 @@ function Header(props) {
         <div className="header-menu">
           <span className="research-use">
             {/*{t('DEV-RELEASE | INVESTIGATIONAL USE ONLY')}*/}
-            {versionStr}
+            {xnatUrl} | {username} |{versionStr}
           </span>
           <Dropdown
             titleElement={<OptionsElement />}

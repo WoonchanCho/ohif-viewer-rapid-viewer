@@ -88,8 +88,8 @@ class Viewer extends Component {
 
   state = {
     isLeftSidePanelOpen: true,
-    isRightSidePanelOpen: false,
-    selectedRightSidePanel: '',
+    isRightSidePanelOpen: true,
+    selectedRightSidePanel: 'rapid-report-panel',
     selectedLeftSidePanel: 'studies', // TODO: Don't hardcode this
     thumbnails: [],
   };
@@ -239,7 +239,7 @@ class Viewer extends Component {
                     <ConnectedHeader
                       linkText={
                         appContext.appConfig.showStudyList
-                          ? 'Study List'
+                          ? 'Work List'
                           : undefined
                       }
                       linkPath={

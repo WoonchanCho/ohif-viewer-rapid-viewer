@@ -1,0 +1,8 @@
+.rapid-active {
+  color: var(--active-color);
+}
+
+.rapid-work-item {
+  cursor: pointer;
+  margin-bottom: 10px;
+}

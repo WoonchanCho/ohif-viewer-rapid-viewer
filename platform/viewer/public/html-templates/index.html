@@ -62,6 +62,27 @@
   <link rel="icon" type="image/png" sizes="228x228" href="<%= PUBLIC_URL %>assets/coast-228x228.png">
   <link rel="yandex-tableau-widget" href="<%= PUBLIC_URL %>assets/yandex-browser-manifest.json">
 
+  <script>
+    // electron app is lancuhed, clear user
+    if (this && this.require) {
+      require('electron').ipcRenderer.on('clear-user', (event, message) => {
+        store.dispatch({type: 'CLEAR_USER'})
+      })
+    }
+
+    // set recent xnat url
+    const urlParams = new URLSearchParams(window.location.search);
+    const xnatUrl  = urlParams.get('xnatUrl');
+    const username  = urlParams.get('username');
+    const loginInfo = {};
+    if (xnatUrl) {
+      loginInfo.xnatUrl = xnatUrl;
+    }
+    if (username) {
+      loginInfo.username = username;
+    }
+    localStorage.setItem('recentLogin', JSON.stringify(loginInfo));
+  </script>
   <!-- Built with: https://polyfill.io/v3/url-builder/ -->
   <!-- Targets IE11 -->
   <script

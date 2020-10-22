@@ -1,27 +1,25 @@
-# OHIF-Viewer-XNAT
+# Rapid Viewer
 
-Upgraded to XNAT OHIF Viewer v4.2.7 ([@ohif/viewer@4.2.7](https://github.com/OHIF/Viewers/releases/tag/%40ohif%2Fviewer%404.2.7))
+*** Rapid Viewer is based on a fork of the dev branch of the [OHIF Viewer XNAT Plugin](https://bitbucket.org/icrimaginginformatics/ohif-viewer-xnat-plugin/src/dev/) repository.***
+This repository is included as a submodule on the rapid-viewer branch of the ??? repository.
 
-***The OHIF-XNAT viewer is based on a fork of [OHIF Viewer 2.0](https://github.com/OHIF/Viewers)) and uses the [React](https://reactjs.org/) JavaScript library.***
-This repository is included as a submodule on the dev branch of the [OHIF Viewer XNAT Plugin](https://bitbucket.org/icrimaginginformatics/ohif-viewer-xnat-plugin/src/dev/) repository.
+### Prerequisite
+XNAT 1.8 node to be connected
+Rapid Viewer XNAT plugin should be installed on the XNAT 1.8 node.
+[ohif-viewer-XNAT-plugin 3.0](https://bitbucket.org/icrimaginginformatics/ohif-viewer-xnat-plugin/src/dev/) should be installed on the XNAT 1.8 node  
 
 ### Development environment
-For testing purposes, and to avoid building and deployment of the XNAT plugin,
-the viewer can run directly from within the development environment.
+yarn
+yarn dev:rapid
 
-* Create /platform/viewer/.env file and fill it with the XNAT platform parameters,
-similar to the example below
-```
-XNAT_DOMAIN=http://10.1.1.17
-XNAT_USERNAME=admin
-XNAT_PASSWORD=admin
-```
-* Start local development server <br>
-```
-yarn run dev:xnat
-```
+### Packaging
+yarn package:rapid
+The package file will be placed on platform/electron/dist 
 
 ***--------------------***
 
 # Original OHIF Viewer README:
 Please refer to [OHIF Viewer 2.0](https://github.com/OHIF/Viewers)
+
+# OHIF Viewer XNAT README:
+Please refer to [OHIF Viewer XNAT Plugin](https://bitbucket.org/icrimaginginformatics/ohif-viewer-xnat-plugin/src/dev/)

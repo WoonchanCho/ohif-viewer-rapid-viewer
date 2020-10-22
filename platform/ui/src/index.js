@@ -31,6 +31,7 @@ import {
   AboutContent,
   OHIFModal,
   ErrorBoundary,
+  WorkList,
 } from './components';
 import { useDebounce, useMedia } from './hooks';
 
@@ -130,4 +131,5 @@ export {
   // Hooks
   useDebounce,
   useMedia,
+  WorkList,
 };

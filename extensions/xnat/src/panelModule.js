@@ -1,5 +1,5 @@
 import React from 'react';
-import XNATNavigationPanel from './components/XNATNavigationPanel.js';
+// import XNATNavigationPanel from './components/XNATNavigationPanel.js';
 import XNATContourPanel from './components/XNATContourPanel.js';
 import XNATSegmentationPanel from './components/XNATSegmentationPanel.js';
 import XNATSegmentationColorSelectModal from './components/XNATSegmentationColorSelectModal/XNATSegmentationColorSelectModal';
@@ -40,11 +40,13 @@ const PanelModule = (servicesManager, commandsManager) => {
   };
 
   const ExtendedXNATContourPanel = props => {
-    return <XNATContourPanel
-      {...props}
-      onContourItemClick={contourItemClickHandler}
-      UIModalService={UIModalService}
-    />;
+    return (
+      <XNATContourPanel
+        {...props}
+        onContourItemClick={contourItemClickHandler}
+        UIModalService={UIModalService}
+      />
+    );
   };
 
   const ExtendedXNATSegmentationPanel = props => {
@@ -64,12 +66,12 @@ const PanelModule = (servicesManager, commandsManager) => {
         from: 'left',
         target: 'studies',
       },
-      {
-        icon: 'list',
-        label: 'XNAT Nav',
-        from: 'left',
-        target: 'xnat-navigation-panel',
-      },
+      // {
+      //   icon: 'list',
+      //   label: 'XNAT Nav',
+      //   from: 'left',
+      //   target: 'xnat-navigation-panel',
+      // },
       {
         icon: 'xnat-contour',
         label: 'Contours',
@@ -84,10 +86,10 @@ const PanelModule = (servicesManager, commandsManager) => {
       },
     ],
     components: [
-      {
-        id: 'xnat-navigation-panel',
-        component: XNATNavigationPanel,
-      },
+      // {
+      //   id: 'xnat-navigation-panel',
+      //   component: XNATNavigationPanel,
+      // },
       {
         id: 'xnat-contour-panel',
         component: ExtendedXNATContourPanel,
