@@ -70,7 +70,11 @@ function RapidRadReportPanel({
       value: field.value,
     }))();
     console.log(formData);
-
+    onSaveComplete({
+      title: 'Save RadReport',
+      message: JSON.stringify(formData),
+      type: 'success',
+    });
     return;
 
     if (postRadReportForm) {
