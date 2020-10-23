@@ -8,11 +8,22 @@ import './RapidRadReportPanel.styl';
 
 function RapidRadReportPanel({
   radReportData,
+  formDisabled,
   postRadReportForm,
   onSaveComplete,
   moveToNextWorkItem,
 }) {
   const reportDiv = useRef();
+  useEffect(() => {
+    function enableDisableForm() {
+      const fields = getAllFormFields();
+      [].map.call(fields, field => {
+        field.disabled = formDisabled;
+      });
+    }
+
+    enableDisableForm(formDisabled);
+  }, [formDisabled]);
   // const [radReportData, setRadReportData] = useState();
 
   // useEffect(() => {
@@ -47,28 +58,35 @@ function RapidRadReportPanel({
       .split('</body>')[0];
 
     return (
-      <TableList customHeader={getCustomHeader(radReportData.title)}>
-        <div
-          ref={reportDiv}
-          className="radReportTableBody"
-          dangerouslySetInnerHTML={{
-            __html: dompurify.sanitize(radReportTemplateData),
-          }}
-        />
-      </TableList>
+      <>
+        {formDisabled && (
+          <div className="warning-status">
+            <div className="warning-border">
+              Form is disabled due to the status.
+            </div>
+          </div>
+        )}
+        <TableList customHeader={getCustomHeader(radReportData.title)}>
+          <div
+            ref={reportDiv}
+            className="radReportTableBody"
+            dangerouslySetInnerHTML={{
+              __html: dompurify.sanitize(radReportTemplateData),
+            }}
+          />
+        </TableList>
+      </>
     );
   }
 
   async function saveFunction(event) {
-    const fields = document.querySelectorAll(
-      '.radReportTable input[type=text],input[type=number],select,textarea'
-    );
-    const formData = [].map.bind(fields, field => ({
+    const fields = getAllFormFields();
+    const formData = [].map.call(fields, field => ({
       id: field.id,
       name: field.name,
       node: field.nodeName,
       value: field.value,
-    }))();
+    }));
     console.log(formData);
     onSaveComplete({
       title: 'Save RadReport',
@@ -100,6 +118,12 @@ function RapidRadReportPanel({
     }
   }
 
+  function getAllFormFields() {
+    return document.querySelectorAll(
+      '.radReportTable input[type=text],input[type=number],select,textarea'
+    );
+  }
+
   function moveToNext() {
     moveToNextWorkItem();
   }
@@ -111,7 +135,11 @@ function RapidRadReportPanel({
       </ScrollableArea>
       <div className="radReportTableFooter">
         {postRadReportForm && (
-          <button onClick={saveFunction} className="saveBtn">
+          <button
+            onClick={saveFunction}
+            className="saveBtn"
+            disabled={formDisabled}
+          >
             <Icon name="save" width="14px" height="14px" />
             Save & Next
           </button>
@@ -128,6 +156,7 @@ function RapidRadReportPanel({
 
 RapidRadReportPanel.propTypes = {
   radReportData: PropTypes.object.isRequired,
+  formDisabled: PropTypes.bool,
   postRadReportForm: PropTypes.func.isRequired,
   onSaveComplete: PropTypes.func.isRequired,
   moveToNextWorkItem: PropTypes.func.isRequired,

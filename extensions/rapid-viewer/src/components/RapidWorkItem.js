@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import './RapidWorkItem.css';
+import './RapidWorkItem.styl';
 
 function RapidWorkItem({ item, pos, isActive, onClick }) {
   return (
@@ -13,11 +13,13 @@ function RapidWorkItem({ item, pos, isActive, onClick }) {
           'rapid-active': isActive,
         })}
       >
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <div>{pos + 1}. </div>
-          <div>
-            <div>{item.experimentLabel}</div>
-            <div>{item.status}</div>
+        <div className="rapid-work-item-field-group">
+          <div className="rapid-work-item-field">
+            {pos + 1}. {item.experimentLabel}
+          </div>
+          <div className="rapid-work-item-field">{item.projectId}</div>
+          <div className="rapid-work-item-field">
+            <div className="rapid-badge">{item.status}</div>
           </div>
         </div>
       </div>

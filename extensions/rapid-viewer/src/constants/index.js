@@ -1,8 +1,17 @@
+export const WorkListStatus = {
+  InProgress: 'InProgress',
+  Open: 'Open',
+  Partial: 'Partial',
+  Complete: 'Complete',
+  Cancelled: 'Cancelled',
+};
+
 export const WorkItemStatus = {
   InProgress: 'InProgress',
   Open: 'Open',
   Partial: 'Partial',
   Complete: 'Complete',
+  Cancelled: 'Cancelled',
 };
 
 export const ErrorMessages = {

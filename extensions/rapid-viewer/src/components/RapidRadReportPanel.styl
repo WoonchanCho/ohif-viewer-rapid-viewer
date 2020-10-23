@@ -5,6 +5,16 @@
   display: flex
   flex-direction: column
 
+  .warning-status
+    overflow: hidden
+    padding-right: 10px
+    margin: 2px;
+
+    .warning-border
+      padding:10px
+      border: 1px solid var(--snackbar-warning)
+      color: var(--snackbar-warning)
+  
   .radReportTableBody
     color: var(--text-primary-color)
     margin: 10px
@@ -30,29 +40,6 @@
         color: var(--text-secondary-color)
         font-size: 12px
 
-    .warning-status
-      display: block
-      position: absolute
-      width: 50px
-      height: 40px
-      padding-left: 7px
-      left: 15px
-      top: 7px
-
-      .warning-border
-        display: block
-        border: 2px solid #e29e4a
-        border-radius: 36px
-        padding: 6px 7px
-        width: 40px
-        height: 40px
-
-      svg
-        color: #e29e4a
-        width: 22px
-        height: 20px
-        pointer-events: inherit
-
   .radReportTableFooter
     padding: 10px
     color: #fff
@@ -77,6 +64,13 @@
         margin-right: 4px
         position: relative
         top: 2px
+
+    .saveBtn:disabled
+      cursor: default
+      border: 1px solid var(--ui-gray-darker)
+      background-color: var(--ui-gray-light)
+      &:hover, &:active
+        background-color: var(--ui-gray-light)
 
     .nextBtn
       border: 1px solid var(--ui-border-color-active)
